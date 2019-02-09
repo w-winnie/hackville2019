@@ -28,4 +28,8 @@ public class DB_Access {
 				System.out.println(e.getMessage());
 			}
 		}
+		
+		public int validateLogin(String username, String password) {
+			return -1;		
+		}
 }
