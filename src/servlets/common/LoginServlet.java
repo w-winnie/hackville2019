@@ -1,4 +1,4 @@
-package servlets;
+package servlets.common;
 
 import java.io.IOException;
 
@@ -17,11 +17,10 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/Login.jsp");
 		rd.forward(request, response);
-		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("userName");
+		String username = request.getParameter("username");
 		String password = request.getParameter("userpassword");
 		DB_Access db = new DB_Access();
 		int uid = db.validateLogin(username, password);
