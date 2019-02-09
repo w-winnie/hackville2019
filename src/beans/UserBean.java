@@ -1,5 +1,7 @@
 package beans;
 
+import java.util.ArrayList;
+
 public class UserBean {
 	private int userid;
 	private String first_name;
@@ -16,12 +18,29 @@ public class UserBean {
 	private String postal_code;
 	private String phone;
 	
+	private ArrayList<DietRestrictionBean> dietRestrictionList;
+	private ArrayList<LanguageBean> languageBeanList;
+	
+	
+	public ArrayList<DietRestrictionBean> getDietRestrictionList() {
+		return dietRestrictionList;
+	}
+	public void setDietRestrictionList(ArrayList<DietRestrictionBean> dietRestrictionList) {
+		this.dietRestrictionList = dietRestrictionList;
+	}
+	public ArrayList<LanguageBean> getLanguageBeanList() {
+		return languageBeanList;
+	}
+	public void setLanguageBeanList(ArrayList<LanguageBean> languageBeanList) {
+		this.languageBeanList = languageBeanList;
+	}
 	public UserBean() {
 		super();
 	}
 	public UserBean(int userid, String first_name, String last_name, String gender, int age, String email,
 			String password, String type, String skype_name, int street_num, String street_name, String city,
-			String postal_code, String phone) {
+			String postal_code, String phone, ArrayList<DietRestrictionBean> dietRestrictionList,
+			ArrayList<LanguageBean> languageBeanList) {
 		super();
 		this.userid = userid;
 		this.first_name = first_name;
@@ -37,25 +56,8 @@ public class UserBean {
 		this.city = city;
 		this.postal_code = postal_code;
 		this.phone = phone;
-	}
-	public UserBean(int userid, String first_name, String last_name, String gender, int age, String email,
-			String password, String type, int street_num, String street_name, String city,
-			String postal_code, String phone) {
-		super();
-		this.userid = userid;
-		this.first_name = first_name;
-		this.last_name = last_name;
-		this.gender = gender;
-		this.age = age;
-		this.email = email;
-		this.password = password;
-		this.type = type;
-		this.skype_name = skype_name;
-		this.street_num = street_num;
-		this.street_name = street_name;
-		this.city = city;
-		this.postal_code = postal_code;
-		this.phone = phone;
+		this.dietRestrictionList = dietRestrictionList;
+		this.languageBeanList = languageBeanList;
 	}
 	public int getUserid() {
 		return userid;
