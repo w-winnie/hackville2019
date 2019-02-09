@@ -1,4 +1,4 @@
-package servlets.common;
+package controller.common;
 
 import java.io.IOException;
 
