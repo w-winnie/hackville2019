@@ -28,16 +28,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>WebContent/WEB-INF/lib/jstl-1.2.jar</name>
-			<type>1</type>
-			<location>D:/Programs3/Java3/jstl-1.2.jar</location>
-		</link>
-		<link>
-			<name>WebContent/WEB-INF/lib/mysql-connector-java-8.0.12.jar</name>
-			<type>1</type>
-			<location>D:/Programs3/Java3/mysql-connector-java-8.0.12.jar</location>
-		</link>
-	</linkedResources>
 </projectDescription>
