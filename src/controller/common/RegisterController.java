@@ -82,6 +82,13 @@ public class RegisterController extends HttpServlet {
 			}
 		}
 		
+		int userid = Integer.parseInt((String) request.getSession().getAttribute("userid"));
+		if(db.isGuest(userid)) {
+			nextpage = "/GuestLandingController";
+		}
+		else {
+			nextpage = "/HostLandingController";
+		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(nextpage);
 		rd.forward(request, response);

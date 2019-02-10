@@ -23,6 +23,11 @@ public class GuestLandingController extends HttpServlet {
 	DB_Access db = new DB_Access();
      
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+		
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ArrayList<DietRestrictionBean> dlist = db.getUserDiet(7);
 		ArrayList<LanguageBean> llist = db.getUserLanguage(7);
 		UserBean userBean = db.getUserInfo(7, dlist, llist);
@@ -33,11 +38,8 @@ public class GuestLandingController extends HttpServlet {
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/GuestLanding.jsp");
 		rd.forward(request, response);
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String action = (String) request.getParameter("actionn");
 		
+		String action = (String) request.getParameter("actionn");
 		if (action != null) {
 			if (action.equals("CommitChange")) {
 				db.editGuestUserInfo(7, "edited strrrr");

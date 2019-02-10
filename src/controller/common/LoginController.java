@@ -34,10 +34,16 @@ public class LoginController extends HttpServlet {
 			// valid login attempt
 			request.getSession().setAttribute("userid", userid);
 			request.getSession().setAttribute("email", email);
+			
 			String action = (String) request.getParameter("actionvall");
 			nextpage = "/WEB-INF/pages/Login.jsp";
+			System.out.println("IIIIIIIII AAAAAAAMMMMMMMMM"+action);
 			if (action!=null) {
-				if (action.equals("Host")) {
+				if(db.isGuest(userid)) {
+					nextpage = "/GuestLandingController";
+					System.out.println("IIIIIIIII AAAAAAAMMMMMMMMM"+db.isGuest(userid));
+				}
+				else {
 					nextpage = "/HostLandingController";
 				}
 			}

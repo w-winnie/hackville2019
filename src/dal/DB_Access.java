@@ -379,4 +379,22 @@ public class DB_Access {
         return guests;
     }
 	
+	public boolean isGuest(int userid) {
+		String sql = "select type from user where userid = ?";
+		try {
+			prepareStatement = conn.prepareStatement(sql);
+			prepareStatement.setInt(1, userid);
+			ResultSet rs = prepareStatement.executeQuery();
+			if (rs.next()) {
+				String type = rs.getString(1);
+				if(type.equalsIgnoreCase("guest")) {
+					return true;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 }
