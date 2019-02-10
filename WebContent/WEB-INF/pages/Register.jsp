@@ -23,7 +23,7 @@
 		type <input type="text" name="type" value=""> <br> 
 		skype <input type="text" name="skype" value=""> <br> 
 		phone <input type="text" name="phone" value=""> <br> 
-		street number <input type="number" name="streetNum" value=""> <br> 
+		street number <input type="number" name="streetNumber" value=""> <br> 
 		street name <input type="text" name="streetName" value=""> <br>
 		city <input type="text" name="city" value=""> <br> 
 		postal code <input type="text" name="postalCode" value=""> <br>
@@ -39,7 +39,7 @@
 		</c:forEach>
 		
 		<input type=hidden name=actionval2 value=Register> 
-		<input type=submit value=Guest>
+		<input type=submit value=Register>
 	</form>
 	<div class="footer"><jsp:include page="/WEB-INF/snippets/Footer.jsp" /></div>
 </body>

@@ -8,11 +8,11 @@
 </head>
 <body>
 <div class="header"><jsp:include page="/WEB-INF/snippets/Header.jsp"/></div>
-<form method=post>
+<form method=post action="HomeController">
 <input type=hidden name=actionvaal value=Login>
  <input type=submit value=Login>
 </form>
-<form method=post action="HomeController">
+<form method=get action="RegisterController">
 <input type=hidden name=actionvaal value=Register>
  <input type=submit value=Register>
 </form>

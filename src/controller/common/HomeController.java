@@ -25,9 +25,9 @@ public class HomeController extends HttpServlet {
 		if (action.equals("Login")) {
 			nextpage = "/LoginController";
 		}
-		if (action.equals("Register")) {
-			nextpage = "/RegisterController";
-		}
+//		if (action.equals("Register")) {
+//			nextpage = "/RegisterController";
+//		}
 		RequestDispatcher rd = request.getRequestDispatcher(nextpage);
 		rd.forward(request, response);
 		

@@ -23,7 +23,10 @@ public class RegisterController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		//TODO: init() method
+		System.out.println("IIIIIIIII");
 		ArrayList<DietRestrictionBean> dietRestrictionList = db.getDietRestrictions();
+		System.out.println(dietRestrictionList.get(0).getRestriction_name());
+		System.out.println("IIIIIIIII AMMMMMMMMMMM HEEEEEERRRRRRRRRRREEEEEEEEEEE");
 		HttpSession sess = request.getSession();
 		sess.setAttribute("alldiets", dietRestrictionList);
 		
@@ -36,34 +39,6 @@ public class RegisterController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String firstName = request.getParameter("fname");
-		String lastName = request.getParameter("lname");
-		String gender = request.getParameter("gender");
-		int age = Integer.parseInt(request.getParameter("age"));
-		String email = request.getParameter("email");
-		String password = request.getParameter("pass");
-		String type = request.getParameter("type");
-		String skype = request.getParameter("skype");
-		String phone = request.getParameter("phone");
-		String streetNumber = request.getParameter("streetNumber");
-		int streetName = Integer.parseInt(request.getParameter("streetName"));
-		String city = request.getParameter("city");
-		String postalCode = request.getParameter("postalCode");
-		
-		String[] dres = request.getParameterValues("dres");
-		ArrayList<DietRestrictionBean> dietList= new ArrayList<DietRestrictionBean>();
-		for(String d : dres) {
-			dietList.add(db.getBeanByDres(d));
-		}
-		
-		String[] lang = request.getParameterValues("lang");
-		ArrayList<LanguageBean> langList = new ArrayList<LanguageBean>();
-		for(String l : lang) {
-			langList.add(db.getBeanByLanguage(l));
-		}
-		
-		
-		
 		
 		
 		String action = (String) request.getParameter("actionval2");
@@ -71,6 +46,27 @@ public class RegisterController extends HttpServlet {
 		if (action != null) {
 			if (action.equals("Register")) {
 				nextpage = "/GuestLandingController";
+				
+				String firstName = request.getParameter("fname");
+				String lastName = request.getParameter("lname");
+				String gender = request.getParameter("gender");
+				int age = Integer.parseInt((String) request.getParameter("age"));
+				String email = request.getParameter("email");
+				String password = request.getParameter("pass");
+				String type = request.getParameter("type");
+				String skype = request.getParameter("skype");
+				String phone = request.getParameter("phone");
+				int streetNumber = Integer.parseInt((String)request.getParameter("streetNumber"));
+				String streetName =  request.getParameter("streetName");
+				String city = request.getParameter("city");
+				String postalCode = request.getParameter("postalCode");
+				
+				String[] diets = request.getParameterValues("dres");
+				
+				String[] langs = request.getParameterValues("language");
+				
+				
+				db.insertUser(firstName, lastName, gender, age, email, password, type, skype, phone, streetNumber, streetName, city, postalCode, diets, langs);
 			}
 		}
 		
