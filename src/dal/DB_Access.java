@@ -86,36 +86,36 @@ public class DB_Access {
 		return languageList;
 	}
 
-	public LanguageBean getBeanByLanguage(String language) {
-		LanguageBean lbean = null;
-		String sql = "select * from lang where language=?";
+	public int getBeanByLanguage(String language) {
+		int lid = 0;
+		String sql = "select langid from lang where language=?";
 		try {
 			prepareStatement = conn.prepareStatement(sql);
 			prepareStatement.setString(1, language);
 			ResultSet rs = prepareStatement.executeQuery();
 			if (rs.next()) {
-				lbean = new LanguageBean(resultSet.getInt("langid"), resultSet.getString("language"));
+				lid = rs.getInt("langid");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return lbean;
+		return lid;
 	}
 
-	public DietRestrictionBean getBeanByDres(String dres) {
-		DietRestrictionBean dbean = null;
-		String sql = "select * from diet_restriction where restriction_name=?";
+	public int getBeanByDres(String dres) {
+		int did = 0;
+		String sql = "select drid from diet_restriction where restriction_name=?";
 		try {
 			prepareStatement = conn.prepareStatement(sql);
 			prepareStatement.setString(1, dres);
 			ResultSet rs = prepareStatement.executeQuery();
 			if (rs.next()) {
-				dbean = new DietRestrictionBean(resultSet.getInt("drid"), resultSet.getString("restriction_name"));
+				did = rs.getInt("drid");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return dbean;
+		return did;
 	}
 
 	public void insertUser(String firstName, String lastName, String gender, int age, String email, String password,
@@ -148,12 +148,12 @@ public class DB_Access {
 		//insert into user lang table
 		int userid = validateLogin(email, password); // TODO: default is -1, check for it
 		int langid;
-		String sql2 = "INSERT INTO userlang VALUES userid = ?, langid = ?";
+		String sql2 = "INSERT INTO userlang VALUES (userid = ?, langid = ?)";
 		try {
 			prepareStatement = conn.prepareStatement(sql2);
 			for (String lang : langs) {
 				prepareStatement.setInt(1, userid);
-				langid = getBeanByLanguage(lang).getLangid();
+				langid = getBeanByLanguage(lang);
 				prepareStatement.setInt(2, langid);
 				prepareStatement.executeUpdate();
 			}
@@ -163,12 +163,12 @@ public class DB_Access {
 		
 		//insert into user- diet table
 		int dietid;
-		String sql3 = "INSERT INTO user_diet_restriction VALUES userid = ?, drid = ?";
+		String sql3 = "INSERT INTO user_diet_restriction VALUES (userid = ?, drid = ?)";
 		try {
 			prepareStatement = conn.prepareStatement(sql3);
 			for (String d : diets) {
 				prepareStatement.setInt(1, userid);
-				dietid = getBeanByDres(d).getDrid();
+				dietid = getBeanByDres(d);
 				prepareStatement.setInt(2, dietid);
 				prepareStatement.executeUpdate();
 			}

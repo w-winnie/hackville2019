@@ -12,7 +12,7 @@
 	<form method=post action="RegisterController">
 		First name <input type="text" name="fname" value=""><br>
 		Last name <input type="text" name="lname" value=""> <br>
-		Gender <select class="" name="">
+		Gender <select name="gender">
 			<option name="gender" value="male">Male</option>
 			<option name="gender" value="female">Female</option>
 			<option name="gender" value="other">Other</option>
