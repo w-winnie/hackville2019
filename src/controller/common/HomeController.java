@@ -19,7 +19,18 @@ public class HomeController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		String action = (String) request.getParameter("actionvaal");
+		String nextpage = "/WEB-INF/pages/Home.jsp";
+		
+		if (action.equals("Login")) {
+			nextpage = "/LoginController";
+		}
+		if (action.equals("Register")) {
+			nextpage = "/RegisterController";
+		}
+		RequestDispatcher rd = request.getRequestDispatcher(nextpage);
+		rd.forward(request, response);
+		
 	}
 
 }

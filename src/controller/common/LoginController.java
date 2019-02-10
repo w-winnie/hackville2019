@@ -20,21 +20,31 @@ public class LoginController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String username = request.getParameter("username");
-		String password = request.getParameter("userpassword");
+		String email = request.getParameter("email");
+		String password = request.getParameter("password");
 		DB_Access db = new DB_Access();
-		int uid = db.validateLogin(username, password);
+		int userid = db.validateLogin(email, password);
+		String nextpage = "/WEB-INF/pages/Login.jsp";
 		
-		if(uid == -1) {
+		if(userid == -1) {
 			// invalid login attempt
-			response.sendRedirect("Login?msg=either name or pass or both are wrong");
+			nextpage = "/WEB-INF/pages/Login.jsp";
 		}
 		else {
 			// valid login attempt
-			request.getSession().setAttribute("uid", uid);
-			request.getSession().setAttribute("username", username);
-			response.sendRedirect("Home");
+			request.getSession().setAttribute("userid", userid);
+			request.getSession().setAttribute("email", email);
+			String action = (String) request.getParameter("actionvall");
+			nextpage = "/WEB-INF/pages/Login.jsp";
+			if (action!=null) {
+				if (action.equals("Host")) {
+					nextpage = "/HostLandingController";
+				}
+			}
 		}
+		
+		RequestDispatcher rd = request.getRequestDispatcher(nextpage);
+		rd.forward(request, response);
 	}
 
 }

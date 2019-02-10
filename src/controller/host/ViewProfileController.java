@@ -9,16 +9,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/HostLandingServlet")
-public class HostLandingServlet extends HttpServlet {
+@WebServlet("/ViewProfileController")
+public class ViewProfileController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/HostLanding.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/ViewProfile.jsp");
 		rd.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
 	}
 
 }
