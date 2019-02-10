@@ -30,12 +30,12 @@
 		
 		dietary restriction 
 		<c:forEach var="diet" items="${alldiets}">
-			<input type="checkbox" name="diet" value=${diet.restriction_name}>${diet.restriction_name}<br>
+			<input type="checkbox" name="dres" value=${diet.restriction_name}>${diet.restriction_name}<br>
 		</c:forEach>
 		
 		language 
 		<c:forEach var="lang" items="${alllanguages}">
-			<input type="checkbox" name="language" value=${lang.language}>${diet.restriction_name}<br>
+			<input type="checkbox" name="language" value=${lang.language}>${lang.language}<br>
 		</c:forEach>
 		
 		<input type=hidden name=actionval2 value=Register> 

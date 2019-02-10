@@ -6,6 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import beans.DietRestrictionBean;
+import beans.LanguageBean;
 
 public class DB_Access {
 		String driver = "com.mysql.jdbc.Driver";
@@ -22,6 +26,7 @@ public class DB_Access {
 			try {
 				Class.forName(driver);
 				conn = DriverManager.getConnection(url, uname, upass);
+				statement = conn.createStatement();
 //				st = conn.createStatement();
 			}
 			catch(Exception e) {
@@ -47,8 +52,98 @@ public class DB_Access {
 			}
 			return userid;		
 		}
-		public void insertUser(String firstName, String lastName, String gender, String age, String email, String password, String type, String skype, String phone, String streetNumber, String streetName, String city, String postalCode) {
+		
+		public ArrayList<DietRestrictionBean> getDietRestrictions() {
+			ArrayList<DietRestrictionBean> dietRestrictionList = new ArrayList<DietRestrictionBean>();
+			try {
+				resultSet = statement.executeQuery("select * from  diet_restriction");
+				if(resultSet.next()) {
+					DietRestrictionBean dbean = new DietRestrictionBean(resultSet.getInt("drid"), resultSet.getString("restriction_name"));
+					dietRestrictionList.add(dbean);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+
+			return dietRestrictionList;
+		}
+		
+		public ArrayList<LanguageBean> getLanguages() {
+			ArrayList<LanguageBean> languageList = new ArrayList<LanguageBean>();
+			try {
+				resultSet = statement.executeQuery("select * from  lang");
+				if(resultSet.next()) {
+					LanguageBean lbean = new LanguageBean(resultSet.getInt("langid"), resultSet.getString("language"));
+					languageList.add(lbean);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			return languageList;
+		}
+		
+		public LanguageBean getBeanByLanguage(String language) {
+			LanguageBean lbean = null;
+			String sql = "select * from lang where language=?";
+			try {
+				prepareStatement = conn.prepareStatement(sql);
+				prepareStatement.setString(1, language);
+				ResultSet rs = prepareStatement.executeQuery();
+				if(rs.next()) {
+					lbean = new LanguageBean(resultSet.getInt("langid"), resultSet.getString("language"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return lbean;
+		}
+		
+		public DietRestrictionBean getBeanByDres(String dres) {
+			DietRestrictionBean dbean = null;
+			String sql = "select * from diet_restriction where restriction_name=?";
+			try {
+				prepareStatement = conn.prepareStatement(sql);
+				prepareStatement.setString(1, dres);
+				ResultSet rs = prepareStatement.executeQuery();
+				if(rs.next()) {
+					dbean = new DietRestrictionBean(resultSet.getInt("drid"), resultSet.getString("restriction_name"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return dbean;
+		}
+		
+		
+		public void insertUser(String firstName, String lastName, String gender, int age, String email, String password, 
+				String type, String skype, String phone, int streetNumber, String streetName, String city, String postalCode,
+				ArrayList<DietRestrictionBean> dietList, ArrayList<LanguageBean> langList) {
 			String sql = "insert into user(first_name, last_name, gender, age, email,password,type,skype_name,street_num,street_name,city,postal_code,phone)"
-					+ "values (first_name = ?,last_name = ?,gender = ?,email = ?,  )";
+					+ "values (first_name = ?,last_name = ?,gender = ?,age = ?,email = ?,password = ?,type = ?,skype_name = ?,street_num = ?,street_name = ?,city = ?,postal_code = ?,phone = ?)";
+			try {
+					prepareStatement = conn.prepareStatement(sql);
+					prepareStatement.setString(1, firstName);
+					prepareStatement.setString(2, lastName);
+					prepareStatement.setString(3, gender);
+					prepareStatement.setInt(4, age);
+					prepareStatement.setString(5, email);
+					prepareStatement.setString(6, password);
+					prepareStatement.setString(7, type);
+					prepareStatement.setString(8, skype);
+					prepareStatement.setString(9, phone);
+					prepareStatement.setInt(10, streetNumber);
+					prepareStatement.setString(11, streetName);
+					prepareStatement.setString(12, city);
+					prepareStatement.setString(13, postalCode);
+					prepareStatement.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			int userid = 
 		}
 }
