@@ -31,27 +31,24 @@ public class RegisterController extends HttpServlet {
 		ArrayList<LanguageBean> languageList = db.getLanguages();
 		sess.setAttribute("alllanguages", languageList);
 
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/Register.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("register.jsp");
 		rd.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		
 		String action = (String) request.getParameter("actionval2");
-		String nextpage = "/WEB-INF/pages/Register.jsp";
+		String nextpage = "register.jsp";
 		if (action != null) {
 			if (action.equals("Register")) {
-				nextpage = "/GuestLandingController";
-				
 				String firstName = request.getParameter("fname");
 				String lastName = request.getParameter("lname");
 				String gender = request.getParameter("gender");
 				int age = Integer.parseInt((String) request.getParameter("age"));
 				String email = request.getParameter("email");
 				String password = request.getParameter("pass");
-				String type = request.getParameter("type");
+				
 				String skype = request.getParameter("skype");
 				String phone = request.getParameter("phone");
 				int streetNumber = Integer.parseInt((String)request.getParameter("streetNumber"));
@@ -62,6 +59,12 @@ public class RegisterController extends HttpServlet {
 				String[] diets = request.getParameterValues("dres");
 				String[] langs = request.getParameterValues("language");
 				
+				String type = request.getParameter("type");
+				
+				if(type.equals("guest")) {
+					String notes = request.getParameter("bio");
+					db.insertGuest(db.getmaxuid(), notes);
+				}
 				
 				db.insertUser(firstName, lastName, gender, age, email, password, 
 						type, skype, phone, streetNumber, streetName, city, postalCode, 
@@ -82,12 +85,14 @@ public class RegisterController extends HttpServlet {
 			}
 		}
 		
-		int userid = Integer.parseInt((String) request.getSession().getAttribute("userid"));
+
+		int userid = db.getmaxuid()- 1;
+		
 		if(db.isGuest(userid)) {
 			nextpage = "/GuestLandingController";
 		}
 		else {
-			nextpage = "/HostLandingController";
+			nextpage = "/ViewProfileController";
 		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(nextpage);

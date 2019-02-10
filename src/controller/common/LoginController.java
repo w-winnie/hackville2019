@@ -15,7 +15,7 @@ public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/Login.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("login.html");
 		rd.forward(request, response);
 	}
 
@@ -24,11 +24,11 @@ public class LoginController extends HttpServlet {
 		String password = request.getParameter("password");
 		DB_Access db = new DB_Access();
 		int userid = db.validateLogin(email, password);
-		String nextpage = "/WEB-INF/pages/Login.jsp";
+		String nextpage = "login.html";
 		
 		if(userid == -1) {
 			// invalid login attempt
-			nextpage = "/WEB-INF/pages/Login.jsp";
+			nextpage = "login.html";
 		}
 		else {
 			// valid login attempt
@@ -37,11 +37,9 @@ public class LoginController extends HttpServlet {
 			
 			String action = (String) request.getParameter("actionvall");
 			nextpage = "/WEB-INF/pages/Login.jsp";
-			System.out.println("IIIIIIIII AAAAAAAMMMMMMMMM"+action);
 			if (action!=null) {
 				if(db.isGuest(userid)) {
 					nextpage = "/GuestLandingController";
-					System.out.println("IIIIIIIII AAAAAAAMMMMMMMMM"+db.isGuest(userid));
 				}
 				else {
 					nextpage = "/HostLandingController";

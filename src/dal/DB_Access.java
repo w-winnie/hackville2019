@@ -177,6 +177,18 @@ public class DB_Access {
 		}
 	}
 	
+	public void insertGuest(int userid, String note) {
+		String sql3 = "INSERT INTO guest(userid,note) VALUES (?,?)";
+		try {
+			prepareStatement = conn.prepareStatement(sql3);
+				prepareStatement.setInt(1, userid);
+				prepareStatement.setString(2, note);
+				boolean result = prepareStatement.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	//TODO: Improve algorithms to support join
 	public ArrayList<DietRestrictionBean> getUserDiet(int userid) {
 		String sql = "SELECT drid FROM user_diet_restriction WHERE userid="+userid;
@@ -395,6 +407,24 @@ public class DB_Access {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public int getmaxuid() {
+		int result = 0;
+		String sql = "select MAX(userid) from user";
+		try {
+			prepareStatement = conn.prepareStatement(sql);
+			ResultSet rs = prepareStatement.executeQuery();
+			if (rs.next()) {
+				String type = rs.getString(1);
+				if(type.equalsIgnoreCase("guest")) {
+					result = rs.getInt(1)+1;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 }
