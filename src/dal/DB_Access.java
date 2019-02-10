@@ -7,9 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import beans.DietRestrictionBean;
+import beans.GuestBean;
 import beans.LanguageBean;
+import beans.UserBean;
 
 public class DB_Access {
 	String driver = "com.mysql.jdbc.Driver";
@@ -32,8 +35,6 @@ public class DB_Access {
 			System.out.println(e.getMessage());
 		}
 	}
-
-	// TODO: Add look up for language and diet
 
 	public int validateLogin(String email, String password) {
 		int userid = -1;
@@ -86,6 +87,7 @@ public class DB_Access {
 		return languageList;
 	}
 
+	// TODO: Delete the methods and test by id in jsps
 	public int getBeanByLanguage(String language) {
 		int lid = 0;
 		String sql = "select langid from lang where language=?";
@@ -174,5 +176,207 @@ public class DB_Access {
 			e.printStackTrace();
 		}
 	}
+	
+	//TODO: Improve algorithms to support join
+	public ArrayList<DietRestrictionBean> getUserDiet(int userid) {
+		String sql = "SELECT drid FROM user_diet_restriction WHERE userid="+userid;
+		ArrayList<DietRestrictionBean> dlist = new ArrayList<DietRestrictionBean>();
+		try {
+			resultSet = statement.executeQuery(sql);
+			while(resultSet.next()) {
+				int drid = resultSet.getInt("drid");
+				String sql2 =  "SELECT restriction_name FROM diet_restriction WHERE drid="+drid;
+				ResultSet resultSet2 = statement.executeQuery(sql2);
+				DietRestrictionBean dbean = new DietRestrictionBean(drid, resultSet.getString("restriction_name"));
+				dlist.add(dbean);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dlist;
+	}
+	
+	public ArrayList<LanguageBean> getUserLanguage(int userid) {
+		String sql = "SELECT langid FROM userlang WHERE userid="+userid;
+		ArrayList<LanguageBean> llist = new ArrayList<LanguageBean>();
+		try {
+			resultSet = statement.executeQuery(sql);
+			while(resultSet.next()) {
+				int langid = resultSet.getInt("langid");
+				String sql2 =  "SELECT lang FROM lang WHERE langid="+langid;
+				ResultSet resultSet2 = statement.executeQuery(sql2);
+				LanguageBean lbean = new LanguageBean(langid, resultSet.getString("lang"));
+				llist.add(lbean);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return llist;
+	}
+	
+	public UserBean getUserInfo(int userid, ArrayList<DietRestrictionBean> dlist,ArrayList<LanguageBean> llist) {
+		String sql = "SELECT * FROM user WHERE userid="+userid;
+		UserBean userBean = null;
+		try {
+			resultSet = statement.executeQuery(sql);
+			if(resultSet.next()) {
+					 userBean = new UserBean(resultSet.getInt("userid"), 
+							 resultSet.getString("first_name"), 
+							 resultSet.getString("last_name"), 
+							 resultSet.getString("gender"),
+							 resultSet.getInt("age"), 
+							 resultSet.getString("email"), 
+							 resultSet.getString("password"), 
+							 resultSet.getString("type"), 
+							 resultSet.getString("skype_name"), 
+							 resultSet.getInt("street_num"),
+							 resultSet.getString("street_name"),
+							 resultSet.getString("city"), 
+							 resultSet.getString("postal_code"), 
+							 resultSet.getString("phone"), dlist, llist);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return userBean;
+		
+	}
+	
+	public GuestBean getGuestUserInfo(int userid, UserBean userBean) {
+		String sql = "SELECT * FROM guest WHERE hostid="+userid;
+		GuestBean guestBean = new GuestBean();
+		try {
+			resultSet = statement.executeQuery(sql);
+			if (resultSet.next()) {
+				guestBean.setHostid(resultSet.getInt("hostid"));
+				guestBean.setNotes(resultSet.getString("notes"));
+				guestBean.setUserBean(userBean);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return guestBean;		
+	}
+	
+	public void editGuestUserInfo(int userid, String editString) {
+		String sql = "UPDATE guest SET notes= '"+editString+"' WHERE hostid="+userid;
+		GuestBean guestBean = new GuestBean();
+		try {
+			  statement.executeUpdate(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public ArrayList<String> getDiet(int userid) {
+        String query = "SELECT drid FROM user_diet_restriction WHERE userid = ?";
+        String query2 = "SELECT restriction_name FROM diet_restriction WHERE drid = ?";
+        ArrayList<Integer> arrDrid = new ArrayList<>();
+        ArrayList<String> dietRestriction = new ArrayList<>();
 
+        try {
+            prepareStatement = conn.prepareStatement(query);
+            prepareStatement.setInt(1, userid);
+            ResultSet rs = prepareStatement.executeQuery();
+
+            while(rs.next()) {
+                arrDrid.add(rs.getInt("drid"));
+            }
+
+
+            prepareStatement = conn.prepareStatement(query2);
+            for(int drid : arrDrid) {
+                prepareStatement.setInt(1, drid);
+                ResultSet rs2 = prepareStatement.executeQuery();
+                if(rs2.next()) {
+                    dietRestriction.add(rs2.getString("restriction_name"));
+                }
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return dietRestriction;
+    }
+	
+	
+	public ArrayList<LanguageBean> getLang(int userid) {
+        String query = "SELECT langid FROM userlang WHERE userid = ?";
+        String query2 = "SELECT language FROM lang WHERE langid = ?";
+        ArrayList<Integer> arrLangId = new ArrayList<>();
+        ArrayList<String> languages = new ArrayList<>();
+        ArrayList<LanguageBean> lb = new ArrayList<>();
+
+        try {
+            prepareStatement = conn.prepareStatement(query);
+            prepareStatement.setInt(1, userid);
+            ResultSet rs = prepareStatement.executeQuery();
+
+            while(rs.next()) {
+                arrLangId.add(rs.getInt("drid"));
+            }
+
+
+            prepareStatement = conn.prepareStatement(query2);
+            for(int langId : arrLangId) {
+                prepareStatement.setInt(1, langId);
+                ResultSet rs2 = prepareStatement.executeQuery();
+                if(rs2.next()) {
+                    lb.add(new LanguageBean(langId, rs2.getString("language")) );
+                }
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lb;
+    }
+	
+	public ArrayList<GuestBean> getAllGuests() {
+        String query = "SELECT * FROM user join guest on userid = hostid";
+        ArrayList<GuestBean> guests = new ArrayList<>();
+        try {
+            Statement s = conn.createStatement();
+            ResultSet rs = s.executeQuery(query);
+
+            if(rs.next()) {
+                //GuestBean gb = new GuestBean(rs.getInt("hostid"),rs.getString("notes"),new UserBean(rs.getString("userid"),rs.getString("first_name"),rs.getString("last_name"),rs.getString("gender"),rs.getInt("age"),rs.getString("email"),rs.getString("password"),
+            	//rs.getString("type"),rs.getString("skype_name"),rs.getString("street_num"),rs.getString("street_name"),rs.getString("city"),
+            	//rs.getString("postal_code"),rs.getString("phone"),getLang(rs.getString("userid")),getDiet(rs.getString("userid"))));
+                GuestBean gb = new GuestBean();
+                gb.setHostid(rs.getInt("hostid"));
+                gb.setNotes(rs.getString("notes"));
+                UserBean ub = new UserBean();
+                ub.setUserid(rs.getInt("userid"));
+                ub.setFirst_name(rs.getString("first_name"));
+                ub.setLast_name(rs.getString("last_name"));
+                ub.setGender(rs.getString("gender"));
+                ub.setAge(rs.getInt("age"));
+                ub.setEmail(rs.getString("email"));
+                ub.setPassword(rs.getString("password"));
+                ub.setType(rs.getString("type"));
+                ub.setSkype_name(rs.getString("skype_name"));
+                ub.setStreet_name(rs.getString("street_name"));
+                ub.setStreet_num(rs.getInt("street_num"));
+                ub.setCity(rs.getString("city"));
+                ub.setPostal_code(rs.getString("postal_code"));
+                ub.setPhone(rs.getString("phone"));
+                ub.setLanguageBeanList(getLang(rs.getInt("userid")));
+                ub.setDietRestrictionList(getUserDiet(rs.getInt("userid")));
+                gb.setUserBean(ub);
+                guests.add(gb);
+                System.out.println("HELLO");
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return guests;
+    }
+	
 }

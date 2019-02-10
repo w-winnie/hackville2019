@@ -23,10 +23,8 @@ public class RegisterController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO: init() method
-		System.out.println("IIIIIIIII");
 		ArrayList<DietRestrictionBean> dietRestrictionList = db.getDietRestrictions();
 		System.out.println(dietRestrictionList.get(0).getRestriction_name());
-		System.out.println("IIIIIIIII AMMMMMMMMMMM HEEEEEERRRRRRRRRRREEEEEEEEEEE");
 		HttpSession sess = request.getSession();
 		sess.setAttribute("alldiets", dietRestrictionList);
 
@@ -62,7 +60,6 @@ public class RegisterController extends HttpServlet {
 				String postalCode = request.getParameter("postalCode");
 				
 				String[] diets = request.getParameterValues("dres");
-				
 				String[] langs = request.getParameterValues("language");
 				
 				

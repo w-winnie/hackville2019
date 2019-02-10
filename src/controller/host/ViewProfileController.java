@@ -15,11 +15,16 @@ public class ViewProfileController extends HttpServlet {
      
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/ViewProfile.jsp");
+		DB_Access db = new DB_Access();
+		HttpSession session = request.getSession();
+		session.setAttribute("guests", db.getAllGuests());
+		for(GuestBean gb: db.getAllGuests()) {
+			System.out.println(gb.getHostid());
+		}
 		rd.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }
