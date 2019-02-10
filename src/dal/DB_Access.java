@@ -103,6 +103,7 @@ public class DB_Access {
 	}
 
 	public int getBeanByDres(String dres) {
+		System.out.println(dres);
 		int did = 0;
 		String sql = "select drid from diet_restriction where restriction_name=?";
 		try {
@@ -110,6 +111,7 @@ public class DB_Access {
 			prepareStatement.setString(1, dres);
 			ResultSet rs = prepareStatement.executeQuery();
 			if (rs.next()) {
+				System.out.println("LOOOOOOP");
 				did = rs.getInt("drid");
 			}
 		} catch (SQLException e) {

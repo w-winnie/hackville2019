@@ -79,6 +79,7 @@ public class RegisterController extends HttpServlet {
 				
 				for (String d : diets) {
 					int dietid = db.getBeanByDres(d);
+					System.out.println(dietid);
 					db.insertUserDres(uid, dietid);
 				}
 			}
