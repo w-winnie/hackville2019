@@ -22,17 +22,17 @@ public class RegisterController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		//TODO: init() method
+		// TODO: init() method
 		System.out.println("IIIIIIIII");
 		ArrayList<DietRestrictionBean> dietRestrictionList = db.getDietRestrictions();
 		System.out.println(dietRestrictionList.get(0).getRestriction_name());
 		System.out.println("IIIIIIIII AMMMMMMMMMMM HEEEEEERRRRRRRRRRREEEEEEEEEEE");
 		HttpSession sess = request.getSession();
 		sess.setAttribute("alldiets", dietRestrictionList);
-		
+
 		ArrayList<LanguageBean> languageList = db.getLanguages();
 		sess.setAttribute("alllanguages", languageList);
-		
+
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/Register.jsp");
 		rd.forward(request, response);
 	}
@@ -66,7 +66,21 @@ public class RegisterController extends HttpServlet {
 				String[] langs = request.getParameterValues("language");
 				
 				
-				db.insertUser(firstName, lastName, gender, age, email, password, type, skype, phone, streetNumber, streetName, city, postalCode, diets, langs);
+				db.insertUser(firstName, lastName, gender, age, email, password, 
+						type, skype, phone, streetNumber, streetName, city, postalCode, 
+						diets, langs);
+				
+				int uid = db.validateLogin(email, password);
+				
+				for (String lang : langs) {
+					int langid = db.getBeanByLanguage(lang);
+					db.insertUserLang(uid, langid);
+				}
+				
+				for (String d : diets) {
+					int dietid = db.getBeanByDres(d);
+					db.insertUserDres(uid, dietid);
+				}
 			}
 		}
 		

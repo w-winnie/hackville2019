@@ -121,10 +121,11 @@ public class DB_Access {
 	public void insertUser(String firstName, String lastName, String gender, int age, String email, String password,
 			String type, String skype, String phone, int streetNumber, String streetName, String city,
 			String postalCode, String[] diets, String langs[]) {
-		
-		//insert into user table
-		String sql = "insert into user(first_name, last_name, gender, age, email,password,type,skype_name,street_num,street_name,city,postal_code,phone)"
-				+ "values (first_name = ?,last_name = ?,gender = ?,age = ?,email = ?,password = ?,type = ?,skype_name = ?,street_num = ?,street_name = ?,city = ?,postal_code = ?,phone = ?)";
+
+		// insert into user table
+		String sql = "insert into user(first_name, last_name, gender, age, email,"
+				+ "password,type,skype_name,phone,street_num,street_name,city,postal_code)"
+				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		try {
 			prepareStatement = conn.prepareStatement(sql);
 			prepareStatement.setString(1, firstName);
@@ -140,42 +141,36 @@ public class DB_Access {
 			prepareStatement.setString(11, streetName);
 			prepareStatement.setString(12, city);
 			prepareStatement.setString(13, postalCode);
-			prepareStatement.executeUpdate();
+			boolean result = prepareStatement.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		//insert into user lang table
-		int userid = validateLogin(email, password); // TODO: default is -1, check for it
-		int langid;
-		String sql2 = "INSERT INTO userlang VALUES (userid = ?, langid = ?)";
-		try {
-			prepareStatement = conn.prepareStatement(sql2);
-			for (String lang : langs) {
-				prepareStatement.setInt(1, userid);
-				langid = getBeanByLanguage(lang);
-				prepareStatement.setInt(2, langid);
-				prepareStatement.executeUpdate();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		//insert into user- diet table
-		int dietid;
-		String sql3 = "INSERT INTO user_diet_restriction VALUES (userid = ?, drid = ?)";
-		try {
-			prepareStatement = conn.prepareStatement(sql3);
-			for (String d : diets) {
-				prepareStatement.setInt(1, userid);
-				dietid = getBeanByDres(d);
-				prepareStatement.setInt(2, dietid);
-				prepareStatement.executeUpdate();
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
 
 	}
+
+	public void insertUserLang(int userid, int langid) {
+
+		String sql2 = "INSERT INTO userlang(userid,langid) VALUES (?,?)";
+		try {
+			prepareStatement = conn.prepareStatement(sql2);
+				prepareStatement.setInt(1, userid);
+				prepareStatement.setInt(2, langid);
+				boolean result = prepareStatement.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void insertUserDres(int userid, int dietid) {
+		String sql3 = "INSERT INTO user_diet_restriction(userid,drid) VALUES (?,?)";
+		try {
+			prepareStatement = conn.prepareStatement(sql3);
+				prepareStatement.setInt(1, userid);
+				prepareStatement.setInt(2, dietid);
+				boolean result = prepareStatement.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
